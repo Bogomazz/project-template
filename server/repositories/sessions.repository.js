@@ -14,6 +14,7 @@ function create(user) {
 }
 
 function find(token) {
+  console.log(SESSIONS.map(s=>s.token).join(', '), token)
   return SESSIONS.find(session => session.token === token);
 }
 

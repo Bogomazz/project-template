@@ -1,8 +1,9 @@
 import React from "react";
+import { AuthService } from "../../services/auth.service";
 import { StoreContext } from "../../store/store.context";
 import { HomeButton } from "./home-button";
 
-export class HeaderView extends React.Component<{userName: string; displayBackButton: boolean}> {
+export class HeaderView extends React.Component<{userName: string; logOutHandler: () => void}> {
   render() {
     return (
       <div style={{
@@ -13,11 +14,9 @@ export class HeaderView extends React.Component<{userName: string; displayBackBu
         padding: '0 20px'
       }}>
         <div>
-          {
-            this.props.displayBackButton && <HomeButton /> || ' '
-          }
+          <HomeButton />
         </div>
-        <div>
+        <div onClick={this.props.logOutHandler}>
           {this.props.userName}
         </div>
       </div>
@@ -25,10 +24,15 @@ export class HeaderView extends React.Component<{userName: string; displayBackBu
   }
 }
 export class Header extends React.Component {
+
+  logOutHandler = () => {
+    AuthService.logout();
+    this.context.setUser(null);
+  }
+
   render() {
     const userName = this.context.user?.name || '';
-    const displayBackButton = window.location.pathname !== '/categories';
-    return <HeaderView {...{userName, displayBackButton}}/>
+    return <HeaderView userName={userName} logOutHandler={this.logOutHandler}/>
   }
 }
 Header.contextType=StoreContext;

@@ -27,6 +27,15 @@ router.post('/login', (req, res) => {
   res.json(SessionsRepository.create(user));
 });
 
+router.get('/:token', (req, res) => {
+  const session = SessionsRepository.find(req.params.token);
+  if (!session) {
+    res.status(404);
+    res.send('Session not found');
+    return;
+  }
 
+  res.json(session);
+})
 
 module.exports = router;
